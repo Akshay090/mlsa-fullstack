@@ -6,10 +6,11 @@ import NewStudentModal from "./NewStudentModal";
 import axios from "axios";
 
 import { API_URL } from "../constants";
+import { getLocalStorage, setLocalStorage } from "../utils";
 
 class Home extends Component {
   state = {
-    students: []
+    students: [],
   };
 
   componentDidMount() {
@@ -17,7 +18,10 @@ class Home extends Component {
   }
 
   getStudents = () => {
-    axios.get(API_URL).then(res => this.setState({ students: res.data }));
+    // axios.get(API_URL).then(res => this.setState({ students: res.data }));
+
+    const studentData = getLocalStorage();
+    this.setState({ students: studentData });
   };
 
   resetState = () => {

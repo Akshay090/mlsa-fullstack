@@ -4,6 +4,7 @@ import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import axios from "axios";
 
 import { API_URL } from "../constants";
+import { getLocalStorage, setLocalStorage } from "../utils";
 
 class NewStudentForm extends React.Component {
   state = {
@@ -11,7 +12,7 @@ class NewStudentForm extends React.Component {
     name: "",
     email: "",
     document: "",
-    phone: ""
+    phone: "",
   };
 
   componentDidMount() {
@@ -21,33 +22,49 @@ class NewStudentForm extends React.Component {
     }
   }
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  createStudent = e => {
+  createStudent = (e) => {
     e.preventDefault();
-    axios.post(API_URL, this.state).then(() => {
-      this.props.resetState();
-      this.props.toggle();
-    });
+    // axios.post(API_URL, this.state).then(() => {
+    //   this.props.resetState();
+    //   this.props.toggle();
+    // });
+
+    const studentData = getLocalStorage();
+    const payload = {...this.state , pk: studentData.length}
+    const newData = [...studentData, payload];
+    setLocalStorage(newData);
+    this.props.resetState();
+    this.props.toggle();
   };
 
-  editStudent = e => {
+  editStudent = (e) => {
     e.preventDefault();
-    axios.put(API_URL + this.state.pk, this.state).then(() => {
-      this.props.resetState();
-      this.props.toggle();
-    });
+    // axios.put(API_URL + this.state.pk, this.state).then(() => {
+    //   this.props.resetState();
+    //   this.props.toggle();
+    // });
+
+    const studentData = getLocalStorage();
+    studentData[this.state.pk] = this.state;
+    setLocalStorage(studentData);
+    this.props.resetState();
+    this.props.toggle();
+
   };
 
-  defaultIfEmpty = value => {
+  defaultIfEmpty = (value) => {
     return value === "" ? "" : value;
   };
 
   render() {
     return (
-      <Form onSubmit={this.props.student ? this.editStudent : this.createStudent}>
+      <Form
+        onSubmit={this.props.student ? this.editStudent : this.createStudent}
+      >
         <FormGroup>
           <Label for="name">Name:</Label>
           <Input

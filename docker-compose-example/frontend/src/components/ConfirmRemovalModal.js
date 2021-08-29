@@ -4,6 +4,7 @@ import { Modal, ModalHeader, Button, ModalFooter } from "reactstrap";
 import axios from "axios";
 
 import { API_URL } from "../constants";
+import { getLocalStorage, setLocalStorage } from "../utils";
 
 class ConfirmRemovalModal extends Component {
   state = {
@@ -17,10 +18,17 @@ class ConfirmRemovalModal extends Component {
   };
 
   deleteStudent = pk => {
-    axios.delete(API_URL + pk).then(() => {
-      this.props.resetState();
-      this.toggle();
-    });
+    // axios.delete(API_URL + pk).then(() => {
+    //   this.props.resetState();
+    //   this.toggle();
+    // });
+
+    const studentData = getLocalStorage();
+    const indexToRemove = studentData.findIndex(elem => elem.pk === pk)
+    studentData.splice(indexToRemove, 1);
+    setLocalStorage(studentData)
+    this.props.resetState();
+    this.toggle();
   };
 
   render() {

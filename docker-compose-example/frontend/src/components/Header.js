@@ -8,7 +8,8 @@ class Header extends Component {
           src="mlsa.png"
           width="300"
           className="img-thumbnail"
-          style={{ marginTop: "20px" }}
+          style={{ marginTop: "20px", maxWidth: "120px" }}
+          alt="mlsa logo"
         />
         <hr />
         <h5>
